@@ -1,0 +1,30 @@
+from typing import *
+from math import sqrt
+
+class Position():
+    def __init__(self, x :int = 0, y :int = 0) -> None:
+        self.x = x
+        self.y = y
+    
+    def set(self, x :int, y :int) -> None:
+        self.x = x
+        self.y = y
+    
+    def __eq__(self, pos :Self) -> bool:
+        return(pos.x == self.x and pos.y == self.y)
+    
+    def __add__(self, pos :Self) -> Self:
+        return(Position(self.x + pos.x, self.y + pos.y))
+    
+    def __sub__(self, pos :Self) -> Self:
+        return(Position(self.x - pos.x, self.y - pos.y))
+    
+    def __mul__(self, pos :Self) -> int:
+        return(self.x * pos.x + self.y * pos.y)
+    
+    def distence(pos1 :Self, pos2 :Self) -> float:
+        return(sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2))
+    
+    def zero(self):
+        self.x = self.y = 0
+        
