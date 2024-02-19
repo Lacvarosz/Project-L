@@ -1,0 +1,3 @@
+id  text                    reactions
+1   Szia, jó találkozni.    2,3
+2   
