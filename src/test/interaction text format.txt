@@ -1,3 +1,22 @@
-id  text                    reactions
-1   Szia, jó találkozni.    2,3
-2   
+[act]
+    text=Helló, hogy vagy?
+    level=0
+    [react]
+        text=Köszi, jól.
+        id=Kecske
+    [/react] #Edd ki a levest
+    [react]
+        text=Szomorúan.
+        [act]
+            text=Mondjak egy viccet?
+            connect=Kecske
+            [react]
+                text=Ne, már csak az hiányzik!
+            [/react]
+        [/act]
+    [/react]
+[/act]
+[act]
+    text=Legyen szép napod!
+    connect=Kecske
+[/act]
