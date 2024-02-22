@@ -1,9 +1,11 @@
 import pygame
 from pygame.locals import *
 from screeninfo import get_monitors
-from utils.position import Position
-from caracter import Player
-from map import Map
+from scripts.utils.position import Position
+from scripts.caracter import Player
+from scripts.view.map_screen import Map_view
+from scripts.view.player_view import Player_view
+from scripts.map import Map
 
 for m in get_monitors():
     if m.is_primary:
@@ -15,16 +17,13 @@ class App():
         self.running = False
         self.screensize = screensize
         self.screen = None
-        self.player_obj = Player(Position(screensize[0]/2, screensize[1]/2),"Chad")
-        self.map_obj = Map(Position(), self.player_obj)
+        self.map = Map_view(Map(),Player_view(Player(Position(screensize[0]/2, screensize[1]/2),"Chad")))
     
     def on_init(self):
         pygame.init()
-        self.screen = pygame.display.set_mode(self.screensize, pygame.RESIZABLE|pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(self.screensize, RESIZABLE|FULLSCREEN)
         pygame.display.set_caption("Mi na")
         self.running = True
-        self.player = pygame.image.load(self.player_obj.picture)
-        self.player = pygame.transform.scale_by(self.player, 0.1)
     
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -37,11 +36,8 @@ class App():
         pass
     
     def on_render(self):
-        self.map_obj.set_pos(self.screensize)
-        self.map = pygame.image.load(self.map_obj.picture)
-        self.map.blit(self.player, (self.player_obj.pos.tuple()))
         self.screen.fill((0,0,0))
-        self.screen.blit(self.map, (self.map_obj.pos.tuple()))
+        self.map.frame(self.screensize, self.screen)
         pygame.display.update()
     
     def on_cleanup(self):
@@ -60,15 +56,7 @@ class App():
         self.on_cleanup()
         
     def mooving(self):
-        keys = pygame.key.get_pressed()
-        if keys[K_LEFT] or keys[K_a]:
-            self.player_obj.move_left(5)
-        if keys[K_RIGHT] or keys[K_d]:
-            self.player_obj.move_right(5)
-        if keys[K_UP] or keys[K_w]:
-            self.player_obj.move_up(5)
-        if keys[K_DOWN] or keys[K_s]:
-            self.player_obj.move_down(5)
+        self.map.player_moving(pygame.key.get_pressed())
         
     
 if __name__ == "__main__":

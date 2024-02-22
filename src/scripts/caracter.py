@@ -1,5 +1,5 @@
-from utils.text_graph import Interaction, Node
-from utils.position import Position
+from scripts.text_graph import Interaction, Node
+from scripts.utils.position import Position
 
 class Caracter():
     def __init__(self, pos :Position = Position(), name:str="NJK") -> None:
