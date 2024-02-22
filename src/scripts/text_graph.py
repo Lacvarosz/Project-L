@@ -1,6 +1,6 @@
 from typing import Self
 from enum import Enum
-from stack import Stack
+from scripts.utils.stack import Stack
 
 class NodeType(Enum):
     ACTION = 0
