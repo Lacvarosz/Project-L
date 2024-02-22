@@ -28,7 +28,7 @@ Currently there are two types of tags: `act`, `react`
 : This is responsible for the PC's answeres. One react scribes a possible chooseble answere.
 
 ### Parameters
-Its possible to infinite count of parameters, but the program uses only 5 parameters.
+Its possible to define infinite count of parameters, but the program uses only 5 parameters.
 
 - text *(text)*
 : This is the text of an action. 
