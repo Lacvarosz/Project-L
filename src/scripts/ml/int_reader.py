@@ -8,17 +8,19 @@ class IllegalFileFormat(Exception):
         super().__init__(*args)
 
 class Interact_reader():
-    def __init__(self, file_path :str) -> None:
-        self.file_path = file_path
+    def __init__(self, file :TextIOWrapper) -> None:
+        self.file = file
         self.lines = 0
     
     def readline(self, file :TextIOWrapper) -> str:
         while True:
             self.lines += 1
             ret = file.readline()
-            if not ret:
-                return("EOF")
             ret = ret.split('#')[0].strip()
+            if ret == "[interaction]":
+                continue
+            if ret == "[/interaction]":
+                return("EOF")
             if ret:
                 return(ret)
     
@@ -52,16 +54,15 @@ class Interact_reader():
             node = inter.search_id(params["connect"])
             parent.add_connection(node)            
     
-    def read(self) -> Interaction:
-        file = open(self.file_path, "r", encoding="utf-8")
+    def read(self) -> tuple[Interaction, TextIOWrapper]:
         struct = Stack[str]()
         nodes = Stack[Node]()
-        line = self.readline(file)
+        line = self.readline(self.file)
         inter = None
         whithout_child = []
         while line:
             if line == "[act]":
-                params, line = self.get_params(file)
+                params, line = self.get_params(self.file)
                 if struct.is_empty():
                     nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params)))
                     self.extra_connection(nodes.peek(),params,inter)
@@ -79,7 +80,7 @@ class Interact_reader():
                 struct.push("[act]")
                 
             elif line == "[react]":
-                params, line = self.get_params(file)
+                params, line = self.get_params(self.file)
                 c = nodes.peek()
                 nodes.push(Node(params["text"],NodeType.REACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params)))
                 self.extra_connection(nodes.peek(),params,inter)
@@ -94,19 +95,19 @@ class Interact_reader():
                         whithout_child.append(node)
                 else:
                     raise IllegalFileFormat(f"Some unclosed tag in line {self.lines}!")
-                line = self.readline(file).split('#')[0].strip()
+                line = self.readline(self.file).split('#')[0].strip()
                 
             elif line == "EOF":
-                return(inter)
+                return(inter, self.file)
             else:
                 raise IllegalFileFormat(f"Something illegal in line {self.lines}!")
         
                 
 if __name__ == "__main__":
-    reader = Interact_reader("src/test/interaction text format.txt")
-    int = reader.read()
+    reader = Interact_reader(open("src/test/interaction text format.txt","r",encoding="utf-8"))
+    int, file = reader.read()
     int.start()
     while int.next():
         pass
     print("-------------------------", "\tAlles OK", "-------------------------", sep="\n")
-    
+    file.close()

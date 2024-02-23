@@ -2,21 +2,23 @@
 
 ## **Interaction Markup Language (IML)**
 ### Building:
+ - `[interaction]`
  - `[tag]`
   - parameters line to line in this format: `<name>=<value>`
   - Child tags with same inside architecture:
     ```
-     [act]
-        level=3
-        id=Chees
-        [react]
-            text=I don't lik you
-        [/react]
+     [tag]
+        <param1>=<value>
+        <param2>=<value>
+        [tag]
+            <param1>=<value>
+        [/tag]
         ...
-     [/act]
+     [/tag]
      ...
      ```
  - `[/tag]`
+ - `[/interaction]`
 
 ### Tags
 Currently there are two types of tags: `act`, `react`
@@ -44,3 +46,30 @@ Its possible to define infinite amount of parameters, but the program only uses 
 
 - repetable *(yes, no)*
 : This parameter responsible for set action repetable or no. Repetable is yes by default. 
+### Example
+```
+[interaction]
+    [act]
+        text=Helló, hogy vagy?
+        level=0
+        [react]
+            text=Köszi, jól.
+            id=Kecske
+        [/react] #Edd ki a levest
+        [react]
+            text=Szomorúan.
+            [act]
+                text=Mondjak egy viccet?
+                connect=Kecske
+                [react]
+                    text=Na már csak az hiányzik!
+                [/react]
+            [/act]
+        [/react]
+    [/act]
+    [act]
+        text=Legyen szép napod!
+        connect=Kecske
+    [/act]
+[/interaction]
+```
