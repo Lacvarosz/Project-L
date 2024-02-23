@@ -23,4 +23,4 @@ class Map_view():
         surf.blit(self.surf, self.pos.tuple())
     
     def player_moving(self, keys :dict) -> None:
-        self.player.moving(keys)
+        self.player.moving(keys, self.surf.get_size())
