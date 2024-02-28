@@ -1,27 +1,34 @@
 from scripts.text_graph import Interaction, Node
 from scripts.utils.position import Position
+import pygame
 
 class Caracter():
-    def __init__(self, pos :Position = Position(), name:str="NJK") -> None:
+    def __init__(self, pos :Position = Position(), name:str="NJK", speed :int = 5) -> None:
         self.name = name
         self.pos = pos
-        self.picture = "src/saki-monkeys-043.jpg"
+        self.speed = speed
+        self.picture = "onlychar.png"
         
 
 class Player(Caracter):
-    def __init__(self, pos: Position = Position(), name: str = "NJK") -> None:
-        super().__init__(pos, name)
+    def __init__(self, pos: Position = Position(), name: str = "NJK", speed :int = 2) -> None:
+        super().__init__(pos, name, speed)
     
-    def move_up(self, y:int, map_size :tuple[int, int], player_size :tuple[int, int]) -> None:
-        if self.pos.y - y > 0:
-            self.pos.y -= y
+    def move(self, movement :list[int,int] = [0, 0]) -> None:
+        self.pos.x += movement[1] * self.speed
+        self.pos.y += movement[0] * self.speed
     
-    def move_down(self, y:int, map_size :tuple[int, int], player_size :tuple[int, int]) -> None:
-        if self.pos.y + player_size[1] + y < map_size[1]:
-            self.pos.y += y
-    def move_left(self, x:int, map_size :tuple[int, int], player_size :tuple[int, int]) -> None:
-        if self.pos.x - x > 0:
-            self.pos.x -= x
-    def move_right(self, x:int, map_size :tuple[int, int], player_size :tuple[int, int]) -> None:
-        if self.pos.x + x +player_size[0] < map_size[0]:
-            self.pos.x += x
+    def offset(self, size :tuple[int,int]) -> tuple[int,int]:
+        return(
+            ((size[0]//2 - self.pos.x), (size[1]//2 - self.pos.y))
+        )
+        
+    def subsurface_rect(self, size :tuple[int,int], upscale : int, map_size :tuple[int, int] = (1024, 1024)) -> pygame.Rect:
+        size = (size[0]//upscale, size[1]//upscale)
+        left_top = [max(-self.offset(size)[0], 0), max(-self.offset(size)[1], 0)]
+        
+        if left_top[0] + size[0] > map_size[0]:
+            left_top[0] = max(map_size[0] - size[0], 0)
+        if left_top[1] + size[1] > map_size[1]:
+            left_top[1] = max(map_size[1] - size[1], 0)
+        return(pygame.Rect(left_top, size))

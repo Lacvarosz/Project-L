@@ -1,4 +1,4 @@
 
 class Map():
-    def __init__(self, picture:str = "src/saki-monkeys-043.jpg") -> None:
+    def __init__(self, picture:str = "falu_1024_test.png") -> None:
         self.picture = picture
