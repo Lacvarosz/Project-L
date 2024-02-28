@@ -18,7 +18,7 @@ class App():
         self.screensize = screensize
         self.upscale = 4
         self.screen = None
-        self.movement = [0,0]
+        self.movement = [0,0, 64/120]
     
     def on_init(self):
         pygame.init()

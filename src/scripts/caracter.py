@@ -14,7 +14,7 @@ class Player(Caracter):
     def __init__(self, pos: Position = Position(), name: str = "NJK", speed :int = 2) -> None:
         super().__init__(pos, name, speed)
     
-    def move(self, movement :list[int,int] = [0, 0]) -> None:
+    def move(self, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024)) -> None:
         self.pos.x += movement[1] * self.speed
         self.pos.y += movement[0] * self.speed
     
