@@ -1,4 +1,4 @@
-from scripts.text_graph import Interaction, Node
+from scripts.model.text_graph import Interaction, Node
 from scripts.utils.position import Position
 import pygame
 

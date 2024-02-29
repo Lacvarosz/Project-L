@@ -2,10 +2,11 @@ import pygame
 from pygame.locals import *
 from screeninfo import get_monitors
 from scripts.utils.position import Position
-from scripts.caracter import Player
+from scripts.model.caracter import Player
 from scripts.view.map_view import Map_view
 from scripts.view.player_view import Player_view
-from scripts.map import Map
+from scripts.model.map import Map
+from scripts.utils.load_image import load_images
 
 for m in get_monitors():
     if m.is_primary:
@@ -24,9 +25,15 @@ class App():
         pygame.init()
         self.screen = pygame.display.set_mode(self.screensize, RESIZABLE|FULLSCREEN)
         pygame.display.set_caption("Mi na")
+        
+        self.assets = {
+                "house" : load_images("house"),
+                "tree" : load_images("tree"),
+            }
+        
         self.running = True
         self.clock = pygame.time.Clock()
-        self.map = Map_view(Map(),Player_view(
+        self.map = Map_view(self.assets, Map(),Player_view(
             Player(
                 Position(self.screensize[0]/2/self.upscale, self.screensize[1]/2/self.upscale),
                 "Chad",

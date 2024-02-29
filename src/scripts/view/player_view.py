@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from scripts.caracter import Player
+from scripts.model.caracter import Player
 from scripts.utils.position import Position
 from scripts.utils.load_image import load_image
 
