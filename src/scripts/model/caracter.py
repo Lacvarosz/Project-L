@@ -3,11 +3,16 @@ from scripts.utils.position import Position
 import pygame
 
 class Caracter():
-    def __init__(self, pos :Position = Position(), name:str="NJK", speed :int = 5) -> None:
+    def __init__(self, pos :Position = Position(), name:str="NJK", speed :int = 5, size = (16,32), collision = (0,16,16,16)) -> None:
         self.name = name
         self.pos = pos
         self.speed = speed
         self.picture = "onlychar.png"
+        self.collision = collision
+        self.size = size
+    
+    def get_collision(self) -> pygame.Rect:
+        return(pygame.Rect(self.pos.x + self.collision[0], self.pos.y + self.collision[1], self.collision[2], self.collision[3]))
         
 
 class Player(Caracter):
