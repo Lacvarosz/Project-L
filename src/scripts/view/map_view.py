@@ -13,19 +13,19 @@ class Map_view():
         self.player = player
         self.tiles = Tiles(
                 [
-                    Tile("tree", 1, Position(344, 133), (48,64), (16, 48, 16, 16)),
-                    Tile("house", 1, Position(512, 512), (80, 112), (0, 32, 80, 80)),
+                    Tile("tree", 1, Position(32, 28), (3,4), (1, 3, 1, 1)),
+                    Tile("house", 1, Position(20, 33), (5, 7), (0, 2, 5, 5)),
                 ],
-                assets
+                assets,
+                16
         )
         
     def update(self, movement :list[int,int] = [0,0]) -> None:
-        self.player.update(movement)
+        self.player.update(movement, self.tiles)
     
     def render(self, surf :pygame.Surface) -> None:
         surf.blit(self.surf, (0,0))
-        for t in self.tiles:
-            surf.blit(self.tiles[t], t.pos.tuple())
+        self.tiles.render(surf)
         self.player.render(surf)
     
     def get_size(self) -> tuple[int, int]:

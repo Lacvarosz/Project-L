@@ -49,22 +49,22 @@ class App():
             if event.key == K_ESCAPE:
                 self.running = False
             if event.key == K_UP:
-                self.movement[0] -= 1
-            if event.key == K_DOWN:
-                self.movement[0] += 1
-            if event.key == K_LEFT:
                 self.movement[1] -= 1
-            if event.key == K_RIGHT:
+            if event.key == K_DOWN:
                 self.movement[1] += 1
+            if event.key == K_LEFT:
+                self.movement[0] -= 1
+            if event.key == K_RIGHT:
+                self.movement[0] += 1
         if event.type == KEYUP:
             if event.key == K_UP:
-                self.movement[0] += 1
-            if event.key == K_DOWN:
-                self.movement[0] -= 1
-            if event.key == K_LEFT:
                 self.movement[1] += 1
-            if event.key == K_RIGHT:
+            if event.key == K_DOWN:
                 self.movement[1] -= 1
+            if event.key == K_LEFT:
+                self.movement[0] += 1
+            if event.key == K_RIGHT:
+                self.movement[0] -= 1
     
     def on_loop(self):
         self.map.update(self.movement)
@@ -91,7 +91,7 @@ class App():
             self.on_loop()
             self.on_render()
             print(self.clock.get_fps(), end="\r")
-            self.clock.tick(120)
+            self.clock.tick()
         self.on_cleanup()
         
     

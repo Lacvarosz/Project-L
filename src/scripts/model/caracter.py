@@ -1,9 +1,10 @@
 from scripts.model.text_graph import Interaction, Node
 from scripts.utils.position import Position
+from scripts.view.tiles import Tiles, Tile
 import pygame
 
 class Caracter():
-    def __init__(self, pos :Position = Position(), name:str="NJK", speed :int = 5, size = (16,32), collision = (0,16,16,16)) -> None:
+    def __init__(self, pos :Position = Position(), name:str="NJK", speed :int = 5, size = 16, collision = (0,1,1,1)) -> None:
         self.name = name
         self.pos = pos
         self.speed = speed
@@ -12,16 +13,45 @@ class Caracter():
         self.size = size
     
     def get_collision(self) -> pygame.Rect:
-        return(pygame.Rect(self.pos.x + self.collision[0], self.pos.y + self.collision[1], self.collision[2], self.collision[3]))
+        return(pygame.Rect(self.pos.x + self.collision[0]*self.size, self.pos.y + self.collision[1]*self.size, self.collision[2]*self.size, self.collision[3]*self.size))
         
 
 class Player(Caracter):
-    def __init__(self, pos: Position = Position(), name: str = "NJK", speed :int = 2) -> None:
-        super().__init__(pos, name, speed)
+    def __init__(self, pos: Position = Position(), name: str = "NJK", speed: int = 1, size=16, collision=(0, 1, 1, 1)) -> None:
+        super().__init__(pos, name, speed, size, collision)
     
-    def move(self, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024)) -> None:
-        self.pos.x += movement[1] * self.speed
-        self.pos.y += movement[0] * self.speed
+    def move(self, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024), tiles :Tiles = Tiles([], [], 0)) -> None:
+        self.pos.x += movement[0] * self.speed
+        
+        p_loc = pygame.Rect((self.pos.x // self.size) + self.collision[0], (self.pos.y // self.size) + self.collision[1], self.collision[2], self.collision[3])
+        for tile in tiles:
+            if p_loc.colliderect(tile.collision):
+                if movement[0] > 0:
+                    p_loc.right = tile.collision.left
+                if movement[0] < 0:
+                    p_loc.left = tile.collision.right
+                self.pos.x = (p_loc.x - self.collision[0])*self.size
+        
+        self.pos.y += movement[1] * self.speed
+        
+        p_loc = pygame.Rect((self.pos.x // self.size) + self.collision[0], (self.pos.y // self.size) + self.collision[1], self.collision[2], self.collision[3])
+        for tile in tiles:
+            if p_loc.colliderect(tile.collision):
+                if movement[1] > 0:
+                    p_loc.bottom = tile.collision.top
+                if movement[1] < 0:
+                    p_loc.top = tile.collision.bottom
+                self.pos.y = (p_loc.y - self.collision[1])*self.size
+                    
+        # Map edge
+        if self.pos.x + self.size > map_size[0]:
+            self.pos.x = map_size[0] - self.size
+        if self.pos.x < 0:
+            self.pos.x = 0
+        if self.pos.y + self.size*2 > map_size[1]:
+            self.pos.y = map_size[1] - self.size*2
+        if self.pos.y < 0:
+            self.pos.y = 0
     
     def offset(self, size :tuple[int,int]) -> tuple[int,int]:
         return(
