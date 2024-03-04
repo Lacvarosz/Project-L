@@ -23,25 +23,27 @@ class Player(Caracter):
     def move(self, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024), tiles :Tiles = Tiles([], [], 0)) -> None:
         self.pos.x += movement[0] * self.speed
         
-        p_loc = pygame.Rect((self.pos.x // self.size) + self.collision[0], (self.pos.y // self.size) + self.collision[1], self.collision[2], self.collision[3])
+        p_loc = pygame.Rect(self.pos.x + self.collision[0]*self.size, self.pos.y + self.collision[1]*self.size, self.collision[2]*self.size, self.collision[3]*self.size)
         for tile in tiles:
-            if p_loc.colliderect(tile.collision):
+            t_coll = tile.get_collision(self.size)
+            if p_loc.colliderect(t_coll):
                 if movement[0] > 0:
-                    p_loc.right = tile.collision.left
+                    p_loc.right = t_coll.left
                 if movement[0] < 0:
-                    p_loc.left = tile.collision.right
-                self.pos.x = (p_loc.x - self.collision[0])*self.size
+                    p_loc.left = t_coll.right
+                self.pos.x = p_loc.x - self.collision[0]*self.size
         
         self.pos.y += movement[1] * self.speed
         
-        p_loc = pygame.Rect((self.pos.x // self.size) + self.collision[0], (self.pos.y // self.size) + self.collision[1], self.collision[2], self.collision[3])
+        p_loc = pygame.Rect(self.pos.x + self.collision[0]*self.size, self.pos.y + self.collision[1]*self.size, self.collision[2]*self.size, self.collision[3]*self.size)
         for tile in tiles:
-            if p_loc.colliderect(tile.collision):
+            t_coll = tile.get_collision(self.size)
+            if p_loc.colliderect(t_coll):
                 if movement[1] > 0:
-                    p_loc.bottom = tile.collision.top
+                    p_loc.bottom = t_coll.top
                 if movement[1] < 0:
-                    p_loc.top = tile.collision.bottom
-                self.pos.y = (p_loc.y - self.collision[1])*self.size
+                    p_loc.top = t_coll.bottom
+                self.pos.y = p_loc.y - self.collision[1]*self.size
                     
         # Map edge
         if self.pos.x + self.size > map_size[0]:
