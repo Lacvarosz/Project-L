@@ -22,7 +22,7 @@ class Position():
     def __mul__(self, pos :Self) -> int:
         return(self.x * pos.x + self.y * pos.y)
     
-    def distence(pos1 :Self, pos2 :Self) -> float:
+    def distance(pos1 :Self, pos2 :Self) -> float:
         return(sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2))
     
     def zero(self):

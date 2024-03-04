@@ -1,6 +1,6 @@
 from io import TextIOWrapper
 from scripts.utils.stack import Stack
-from scripts.text_graph import *
+from scripts.model.text_graph import *
 from typing import Any
 
 class IllegalFileFormat(Exception):

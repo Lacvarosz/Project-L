@@ -2,10 +2,11 @@ import pygame
 from pygame.locals import *
 from screeninfo import get_monitors
 from scripts.utils.position import Position
-from scripts.caracter import Player
-from scripts.view.map_screen import Map_view
+from scripts.model.caracter import Player
+from scripts.view.map_view import Map_view
 from scripts.view.player_view import Player_view
-from scripts.map import Map
+from scripts.model.map import Map
+from scripts.utils.load_image import load_images
 
 for m in get_monitors():
     if m.is_primary:
@@ -16,28 +17,65 @@ class App():
     def __init__(self, screensize :tuple[int,int] = SCREENSIZE):
         self.running = False
         self.screensize = screensize
+        self.upscale = 4
         self.screen = None
-        self.map = Map_view(Map(),Player_view(Player(Position(screensize[0]/2, screensize[1]/2),"Chad")))
+        self.movement = [0,0, 64/120]
     
     def on_init(self):
         pygame.init()
         self.screen = pygame.display.set_mode(self.screensize, RESIZABLE|FULLSCREEN)
         pygame.display.set_caption("Mi na")
+        
+        self.assets = {
+                "house" : load_images("house"),
+                "tree" : load_images("tree"),
+            }
+        
         self.running = True
+        self.clock = pygame.time.Clock()
+        self.map = Map_view(self.assets, Map(),Player_view(
+            Player(
+                Position(self.screensize[0]/2/self.upscale, self.screensize[1]/2/self.upscale),
+                "Chad",
+                1
+                )
+            ))
+        self.display = pygame.Surface(self.map.get_size(),HWSURFACE)
     
-    def on_event(self, event):
+    def on_event(self, event :pygame.event.Event):
         if event.type == pygame.QUIT:
             self.running = False
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 self.running = False
+            if event.key == K_UP:
+                self.movement[1] -= 1
+            if event.key == K_DOWN:
+                self.movement[1] += 1
+            if event.key == K_LEFT:
+                self.movement[0] -= 1
+            if event.key == K_RIGHT:
+                self.movement[0] += 1
+        if event.type == KEYUP:
+            if event.key == K_UP:
+                self.movement[1] += 1
+            if event.key == K_DOWN:
+                self.movement[1] -= 1
+            if event.key == K_LEFT:
+                self.movement[0] += 1
+            if event.key == K_RIGHT:
+                self.movement[0] -= 1
     
     def on_loop(self):
-        pass
+        self.map.update(self.movement)
     
     def on_render(self):
         self.screen.fill((0,0,0))
-        self.map.frame(self.screensize, self.screen)
+        self.map.render(self.display)
+        # print(self.display.get_size())
+        self.screen.blit(pygame.transform.scale_by(self.display.subsurface(
+                self.map.player.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size())
+            ), self.upscale), (0,0))
         pygame.display.update()
     
     def on_cleanup(self):
@@ -50,13 +88,11 @@ class App():
         while( self.running ):
             for event in pygame.event.get():
                 self.on_event(event)
-            self.mooving()
             self.on_loop()
             self.on_render()
+            print(self.clock.get_fps(), end="\r")
+            self.clock.tick()
         self.on_cleanup()
-        
-    def mooving(self):
-        self.map.player_moving(pygame.key.get_pressed())
         
     
 if __name__ == "__main__":
