@@ -14,7 +14,7 @@ class Map_view():
         self.tiles = Tiles(
                 [
                     Tile("tree", 1, Position(32, 28), (3,4), (1, 3, 1, 1)),
-                    Tile("house", 1, Position(20, 33), (5, 7), (1, 2, 5, 5)),
+                    Tile("house", 1, Position(20, 33), (7, 7), (1, 2, 5, 5)),
                 ],
                 assets,
                 16
