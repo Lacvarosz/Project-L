@@ -13,8 +13,16 @@ class Map_view():
         self.player = player
         self.tiles = Tiles(
                 [
-                    Tile("tree", 1, Position(32, 28), (3,4), (1, 3, 1, 1)),
-                    Tile("house", 1, Position(20, 33), (7, 7), (1, 2, 5, 5)),
+                    Tile("tree", 0, Position(32, 28), (3,4), (1, 3, 1, 1)),
+                    Tile("house", 0, Position(20, 33), (7, 7), (1, 2, 5, 5)),
+                    Tile("water", 0, Position(11, 11)),
+                    Tile("water", 0, Position(11, 12)),
+                    Tile("water", 0, Position(11, 13)),
+                    Tile("water", 0, Position(11, 14)),
+                    Tile("water", 0, Position(12, 11)),
+                    Tile("water", 0, Position(13, 11)),
+                    Tile("water", 0, Position(12, 12)),
+                    Tile("water", 0, Position(13, 13)),
                 ],
                 assets,
                 16

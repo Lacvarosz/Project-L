@@ -1,12 +1,13 @@
 import pygame
 from pygame.locals import *
 from screeninfo import get_monitors
-from scripts.utils.position import Position
 from scripts.model.caracter import Player
-from scripts.view.map_view import Map_view
-from scripts.view.player_view import Player_view
+from scripts.utils.animation import Animation
 from scripts.model.map import Map
 from scripts.utils.load_image import load_images
+from scripts.utils.position import Position
+from scripts.view.map_view import Map_view
+from scripts.view.player_view import Player_view
 
 for m in get_monitors():
     if m.is_primary:
@@ -27,8 +28,9 @@ class App():
         pygame.display.set_caption("Mi na")
         
         self.assets = {
-                "house" : load_images("house"),
-                "tree" : load_images("tree"),
+                "house0" : Animation(load_images("house/0"), 10),
+                "tree0" : Animation(load_images("tree/0"), 7),
+                "water0": Animation(load_images("water/0"),30),
             }
         
         self.running = True
@@ -91,7 +93,7 @@ class App():
             self.on_loop()
             self.on_render()
             print(self.clock.get_fps(), end="\r")
-            self.clock.tick()
+            self.clock.tick(120)
         self.on_cleanup()
         
     
