@@ -31,9 +31,9 @@ class Map_view():
     def update(self, movement :list[int,int] = [0,0]) -> None:
         self.player.update(movement, self.tiles)
     
-    def render(self, surf :pygame.Surface) -> None:
+    def render(self, surf :pygame.Surface, monitor_rect :pygame.Rect) -> None:
         surf.blit(self.surf, (0,0))
-        self.tiles.render(surf)
+        self.tiles.render(surf, monitor_rect)
         self.player.render(surf)
     
     def get_size(self) -> tuple[int, int]:

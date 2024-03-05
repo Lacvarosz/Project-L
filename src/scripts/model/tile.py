@@ -10,7 +10,6 @@ class Tile():
         self.size = size
         
         self.collision = (pos.x + collision[0], pos.y + collision[1], collision[2], collision[3])
-        self.outer_rect = Rect(pos.tuple(), size)
         
     def get_collision(self, tile_size :int) -> Rect:
         return(Rect(
@@ -18,4 +17,12 @@ class Tile():
                 self.collision[1]*tile_size,
                 self.collision[2]*tile_size,
                 self.collision[3]*tile_size
+            ))
+    
+    def get_outer_rect(self, tile_size :int) -> Rect:
+        return(Rect(
+                self.pos.x*tile_size,
+                self.pos.y*tile_size,
+                self.size[0]*tile_size,
+                self.size[1]*tile_size
             ))

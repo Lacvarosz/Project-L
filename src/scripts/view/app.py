@@ -73,7 +73,7 @@ class App():
     
     def on_render(self):
         self.screen.fill((0,0,0))
-        self.map.render(self.display)
+        self.map.render(self.display, self.map.player.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size()))
         # print(self.display.get_size())
         self.screen.blit(pygame.transform.scale_by(self.display.subsurface(
                 self.map.player.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size())

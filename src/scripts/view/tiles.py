@@ -1,5 +1,5 @@
 from scripts.model.tile import Tile
-from pygame import Surface
+from pygame import Surface, Rect
 from scripts.utils.position import Position
 from scripts.utils.animation import Animation
 
@@ -19,7 +19,8 @@ class Tiles():
         return(self.tiles[key])
     
     
-    def render(self, surf :Surface) -> None:
+    def render(self, surf :Surface, monitor_rect :Rect) -> None:
         for tile in self.tiles:
             self.tiles[tile].update()
-            surf.blit(self.tiles[tile].img(), (tile.pos.x*self.tile_size, tile.pos.y*self.tile_size))
+            if monitor_rect.colliderect(tile.get_outer_rect(self.tile_size)):
+                surf.blit(self.tiles[tile].img(), (tile.pos.x*self.tile_size, tile.pos.y*self.tile_size))
