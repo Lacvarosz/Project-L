@@ -33,8 +33,7 @@ class Map_view():
     
     def render(self, surf :pygame.Surface, monitor_rect :pygame.Rect) -> None:
         surf.blit(self.surf, (0,0))
-        self.tiles.render(surf, monitor_rect)
-        self.player.render(surf)
+        self.tiles.render(surf, monitor_rect, self.player)
     
     def get_size(self) -> tuple[int, int]:
         return(self.surf.get_size())
