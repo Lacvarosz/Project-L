@@ -35,7 +35,7 @@ class Tiles():
         isnt_blit = True
         for tile in self.tiles:
             self.tiles[tile].update()
-            if isnt_blit and tile.get_collision(self.tile_size).y > player.player.get_collision().y:
+            if isnt_blit and tile.get_collision(self.tile_size).bottom > player.player.get_collision().bottom:
                 player.render(surf)
                 isnt_blit = False
             if monitor_rect.colliderect(tile.get_outer_rect(self.tile_size)):
