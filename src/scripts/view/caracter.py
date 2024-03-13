@@ -43,10 +43,7 @@ class Caracter(Blitable):
         surf.blit(self.anim.img(), (self.pos).tuple())
     
     def move(self, entites :Entities, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024), tile_size :int = 16) -> None:
-        print(movement, self.speed, 000)
         self.pos.x += (movement[0] * self.speed)
-        
-        test = True
         
         p_loc = self.get_collision(tile_size)
         for e in entites.entities:
@@ -57,9 +54,6 @@ class Caracter(Blitable):
                 if movement[0] < 0:
                     p_loc.left = t_coll.right
                 self.pos.x = p_loc.x - self.collision[0]*tile_size
-                test = False
-        
-        print(test)
         
         self.pos.y += movement[1] * self.speed
         
@@ -82,8 +76,6 @@ class Caracter(Blitable):
             self.pos.y = map_size[1] - self.size[1]*tile_size
         if self.pos.y < 0:
             self.pos.y = 0
-        
-        print(self.pos)
     
     def offset(self, size :tuple[int,int]) -> tuple[int,int]:
         return(
