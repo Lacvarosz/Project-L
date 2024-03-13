@@ -1,12 +1,12 @@
 import pygame
 from pygame.locals import *
 from screeninfo import get_monitors
-from scripts.utils.position import Position
-from scripts.model.caracter import Player
-from scripts.view.map_view import Map_view
-from scripts.view.player_view import Player_view
+from scripts.utils.animation import Animation
 from scripts.model.map import Map
-from scripts.utils.load_image import load_images
+from scripts.utils.load_image import *
+from scripts.utils.position import Position
+from scripts.view.map_view import Map_view
+from scripts.view.caracter import Caracter
 
 for m in get_monitors():
     if m.is_primary:
@@ -19,7 +19,7 @@ class App():
         self.screensize = screensize
         self.upscale = 4
         self.screen = None
-        self.movement = [0,0, 64/120]
+        self.movement = [0,0]
     
     def on_init(self):
         pygame.init()
@@ -27,19 +27,22 @@ class App():
         pygame.display.set_caption("Mi na")
         
         self.assets = {
-                "house" : load_images("house"),
-                "tree" : load_images("tree"),
+                "house0" : Animation(load_images("house/0"), 10),
+                "tree0" : Animation(load_images("tree/0"), 7),
+                "water0": Animation(load_images("water/0"),30),
+                "player": Animation([load_image("onlychar.png")], 1)
             }
         
         self.running = True
         self.clock = pygame.time.Clock()
-        self.map = Map_view(self.assets, Map(),Player_view(
-            Player(
-                Position(self.screensize[0]/2/self.upscale, self.screensize[1]/2/self.upscale),
-                "Chad",
-                1
-                )
-            ))
+        self.map = Map_view(self.assets, Map(),Caracter(
+            self.assets["player"],
+            Position(self.screensize[0]//2//self.upscale, self.screensize[1]//2//self.upscale),
+            "Chad",
+            1,
+            (1,2),
+            (0,1,1,1)
+        ))
         self.display = pygame.Surface(self.map.get_size(),HWSURFACE)
     
     def on_event(self, event :pygame.event.Event):
@@ -71,10 +74,10 @@ class App():
     
     def on_render(self):
         self.screen.fill((0,0,0))
-        self.map.render(self.display)
+        self.map.render(self.display, self.map.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size()))
         # print(self.display.get_size())
         self.screen.blit(pygame.transform.scale_by(self.display.subsurface(
-                self.map.player.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size())
+                self.map.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size())
             ), self.upscale), (0,0))
         pygame.display.update()
     
@@ -91,7 +94,7 @@ class App():
             self.on_loop()
             self.on_render()
             print(self.clock.get_fps(), end="\r")
-            self.clock.tick()
+            self.clock.tick(120)
         self.on_cleanup()
         
     

@@ -19,8 +19,12 @@ class Position():
     def __sub__(self, pos :Self) -> Self:
         return(Position(self.x - pos.x, self.y - pos.y))
     
+    @overload
     def __mul__(self, pos :Self) -> int:
         return(self.x * pos.x + self.y * pos.y)
+    
+    def __mul__(self, n :int) -> Self:
+        return(Position(self.x*n, self.y*n))
     
     def distance(pos1 :Self, pos2 :Self) -> float:
         return(sqrt((pos1.x - pos2.x)**2 + (pos1.y - pos2.y)**2))
