@@ -40,8 +40,10 @@ class Character(Blitable):
     def set_entities(self, entities: Entities) -> None:
         self.entities = entities
     
-    def render(self, surf: pygame.Surface, tile_size: int) -> None:
-        surf.blit(self.anim.img(), (self.pos).tuple())
+    def render(self, surf: pygame.Surface, tile_size: int, alpha :int) -> None:
+        img = self.anim.img()
+        img.set_alpha(alpha)
+        surf.blit(img, (self.pos).tuple())
     
     def move(self, entites :Entities, movement :list[int,int] = [0, 0], map_size: tuple[int, int] = (1024, 1024), tile_size :int = 16) -> bool:
         

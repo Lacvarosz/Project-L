@@ -22,7 +22,7 @@ class Entities():
                 if tiles[j].has_collision and not tiles[j+1].has_collision:
                     tiles[j], tiles[j+1] = tiles[j+1], tiles[j]
                     swapped = True
-                elif tiles[j].get_collision(self.tile_size).y > tiles[j+1].get_collision(self.tile_size).y:
+                elif tiles[j].get_collision(self.tile_size).bottom > tiles[j+1].get_collision(self.tile_size).bottom:
                     tiles[j], tiles[j+1] = tiles[j+1], tiles[j]
                     swapped = True
             if (swapped == False):
@@ -40,4 +40,7 @@ class Entities():
     def render(self, surf :Surface, monitor_rect :Rect) -> None:
         for entity in self.entities:
             if entity.get_outer_rect(self.tile_size).colliderect(monitor_rect):
-                entity.render(surf, self.tile_size)
+                alpha = 251
+                if entity is not self.player and entity.get_outer_rect(self.tile_size).colliderect(self.player.get_outer_rect(self.tile_size)) and entity.get_collision(self.tile_size).y > self.player.get_outer_rect(self.tile_size).y:
+                    alpha = 100
+                entity.render(surf, self.tile_size, alpha)

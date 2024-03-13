@@ -18,8 +18,10 @@ class Blitable():
     def update(self) -> None:
         self.anim.update()
     
-    def render(self, surf :Surface, tile_size :int) -> None:
-        surf.blit(self.anim.img(), (self.pos * tile_size).tuple())
+    def render(self, surf :Surface, tile_size :int, alpha :int) -> None:
+        img = self.anim.img()
+        img.set_alpha(alpha)
+        surf.blit(img, (self.pos * tile_size).tuple())
     
     def __str__(self) -> str:
         return(str(self.get_collision(16).y))
