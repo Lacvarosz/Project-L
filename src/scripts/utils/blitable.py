@@ -3,9 +3,10 @@ from scripts.utils.position import Position
 from scripts.utils.animation import Animation
 
 class Blitable():
-    def __init__(self, anim :Animation, pos :Position):
+    def __init__(self, anim :Animation, pos :Position, has_collision = True):
         self.anim = anim
         self.pos = pos
+        self.has_collision = has_collision
         
         
     def get_collision(self, tile_size :int) -> Rect:

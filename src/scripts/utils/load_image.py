@@ -6,8 +6,10 @@ BASE_IMAGE_PATH = "src/image/"
 
 def load_image(path):
     img = pygame.image.load(BASE_IMAGE_PATH + path).convert()
-    img.set_colorkey((0,0,0))
-    return img
+    surf = pygame.Surface(img.get_size(),pygame.HWSURFACE)
+    surf.blit(img, (0,0))
+    surf.set_colorkey((0,0,0))
+    return surf
 
 def load_images(path):
     images = []

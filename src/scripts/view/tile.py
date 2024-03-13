@@ -5,8 +5,8 @@ from scripts.utils.blitable import Blitable
 from pygame import Rect
 
 class Tile(Blitable):
-    def __init__(self, type_t :str, variant :int, anim: Animation, pos: Position, size: tuple[int, int] = (1,1), collision :tuple[int,int,int,int] = (0,0,1,1)):
-        super().__init__(anim, pos)
+    def __init__(self, type_t :str, variant :str, anim: Animation, pos: Position, has_collision :bool = True, size: tuple[int, int] = (1,1), collision :tuple[int,int,int,int] = (0,0,1,1)):
+        super().__init__(anim, pos, has_collision)
         self.type = type_t
         self.variant = variant
         self.size = size
@@ -18,7 +18,7 @@ class Tile(Blitable):
                 (self.pos.y + self.collision[1]) * tile_size,
                 self.collision[2] * tile_size,
                 self.collision[3] * tile_size
-            ))
+            ) if self.has_collision else self.get_outer_rect(tile_size))
     
     def get_outer_rect(self, tile_size :int) -> Rect:
         return(Rect(

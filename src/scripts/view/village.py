@@ -6,7 +6,7 @@ from scripts.model.map import Map
 from scripts.utils.load_image import *
 from scripts.utils.position import Position
 from scripts.view.map_view import Map_view
-from scripts.view.caracter import Caracter
+from scripts.view.character import Player
 
 for m in get_monitors():
     if m.is_primary:
@@ -18,6 +18,7 @@ class App():
         self.running = False
         self.screensize = screensize
         self.upscale = 4
+        self.tile_size = 16
         self.screen = None
         self.movement = [0,0]
     
@@ -27,22 +28,26 @@ class App():
         pygame.display.set_caption("Mi na")
         
         self.assets = {
-                "house0" : Animation(load_images("house/0"), 10),
-                "tree0" : Animation(load_images("tree/0"), 7),
-                "water0": Animation(load_images("water/0"),30),
-                "player": Animation([load_image("onlychar.png")], 1)
+                "house_simple" : Animation(load_images("house/simple"), 10),
+                "house_peasent" : Animation(load_images("house/peasent"), 10),
+                "house_villageelder" : Animation(load_images("house/villageelder"), 10),
+                "tree_green" : Animation(load_images("tree/green"), 7),
+                "water_light": Animation(load_images("water/light"),30),
+                "player": Animation([load_image("characters/main character.png")], 1),
+                "village_elder": Animation([load_image("characters/village elder.png")],1),
             }
         
         self.running = True
         self.clock = pygame.time.Clock()
-        self.map = Map_view(self.assets, Map(),Caracter(
+        self.map = Map_view(self.assets, Map(),Player(
             self.assets["player"],
             Position(self.screensize[0]//2//self.upscale, self.screensize[1]//2//self.upscale),
+            True,
             "Chad",
             1,
             (1,2),
             (0,1,1,1)
-        ))
+        ), self.tile_size)
         self.display = pygame.Surface(self.map.get_size(),HWSURFACE)
     
     def on_event(self, event :pygame.event.Event):
@@ -94,7 +99,7 @@ class App():
             self.on_loop()
             self.on_render()
             print(self.clock.get_fps(), end="\r")
-            self.clock.tick(120)
+            self.clock.tick()
         self.on_cleanup()
         
     

@@ -35,6 +35,10 @@ class Position():
     def tuple(self) -> tuple[int, int]:
         return((self.x, self.y))
     
+    def to_int(self) -> None:
+        self.x = int(self.x)
+        self.y = int(self.y)
+    
     def __str__(self) -> str:
         return(f'({self.x}, {self.y})')
         
