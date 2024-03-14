@@ -8,8 +8,7 @@ class IllegalFileFormat(Exception):
         super().__init__(*args)
 
 class Interact_reader():
-    def __init__(self, file :TextIOWrapper) -> None:
-        self.file = file
+    def __init__(self) -> None:
         self.lines = 0
     
     def readline(self, file :TextIOWrapper) -> str:
@@ -54,15 +53,16 @@ class Interact_reader():
             node = inter.search_id(params["connect"])
             parent.add_connection(node)            
     
-    def read(self) -> tuple[Interaction, TextIOWrapper]:
+    def read(self, file :TextIOWrapper) -> tuple[Interaction, TextIOWrapper]:
+        self.lines = 0
         struct = Stack[str]()
         nodes = Stack[Node]()
-        line = self.readline(self.file)
+        line = self.readline(file)
         inter = None
         whithout_child = []
         while line:
             if line == "[act]":
-                params, line = self.get_params(self.file)
+                params, line = self.get_params(file)
                 if struct.is_empty():
                     nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params)))
                     self.extra_connection(nodes.peek(),params,inter)
@@ -80,7 +80,7 @@ class Interact_reader():
                 struct.push("[act]")
                 
             elif line == "[react]":
-                params, line = self.get_params(self.file)
+                params, line = self.get_params(file)
                 c = nodes.peek()
                 nodes.push(Node(params["text"],NodeType.REACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params)))
                 self.extra_connection(nodes.peek(),params,inter)
@@ -95,10 +95,10 @@ class Interact_reader():
                         whithout_child.append(node)
                 else:
                     raise IllegalFileFormat(f"Some unclosed tag in line {self.lines}!")
-                line = self.readline(self.file).split('#')[0].strip()
+                line = self.readline(file).split('#')[0].strip()
                 
             elif line == "EOF":
-                return(inter, self.file)
+                return(inter, file)
             else:
                 raise IllegalFileFormat(f"Something illegal in line {self.lines}!")
         

@@ -1,6 +1,7 @@
 from pygame import Surface, Rect
 from scripts.utils.blitable import Blitable
 from concurrent.futures import ThreadPoolExecutor
+from scripts.view.tile import Tile
 
 class Entities():
     def __init__(self, player, npcs, tiles, tile_size) -> None:
@@ -39,8 +40,8 @@ class Entities():
     
     def render(self, surf :Surface, monitor_rect :Rect) -> None:
         for entity in self.entities:
-            if entity.get_outer_rect(self.tile_size).colliderect(monitor_rect):
-                alpha = 251
-                if entity is not self.player and entity.get_outer_rect(self.tile_size).colliderect(self.player.get_outer_rect(self.tile_size)) and entity.get_collision(self.tile_size).y > self.player.get_outer_rect(self.tile_size).y:
-                    alpha = 100
-                entity.render(surf, self.tile_size, alpha)
+            # if entity.get_outer_rect(self.tile_size).colliderect(monitor_rect):
+            alpha = 251
+            if type(entity) == Tile and entity.get_outer_rect(self.tile_size).colliderect(self.player.get_outer_rect(self.tile_size)) and entity.get_collision(self.tile_size).y > self.player.get_outer_rect(self.tile_size).y:
+                alpha = 100
+            entity.render(surf, self.tile_size, alpha)

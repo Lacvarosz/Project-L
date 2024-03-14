@@ -5,6 +5,7 @@ from scripts.utils.position import Position
 from scripts.view.entities import Entities
 from scripts.utils.load_image import load_image
 from scripts.utils.blitable import Blitable
+from scripts.model.text_graph import Interaction
 
 from random import randint
 
@@ -115,13 +116,14 @@ class Player(Character):
 
 
 class Npc(Character):
-    def __init__(self, anim: Animation, pos: Position, has_collision: bool, name: str, speed: int, size: tuple[int, int], collision: tuple[int, int, int, int]):
+    def __init__(self, interaction :Interaction, anim: Animation, pos: Position, has_collision: bool, name: str, speed: int, size: tuple[int, int], collision: tuple[int, int, int, int]):
         super().__init__(anim, pos, has_collision, name, speed, size, collision)
-        self.movement = [randint(-1, 1), randint(-1, 1)]
+        self.interaction = interaction
         
     def update(self) -> None:
-        if not self.move(self.entities, self.movement, (1024, 1024)):
-            self.movement = [randint(-1, 1), randint(-1, 1)]
-            while 0 == self.movement[0] and 0 == self.movement[1]:
-                self.movement = [randint(-1, 1), randint(-1, 1)]
-            self.pos.to_int()
+        pass
+        # if not self.move(self.entities, self.movement, (1024, 1024)):
+        #     self.movement = [randint(-1, 1), randint(-1, 1)]
+        #     while 0 == self.movement[0] and 0 == self.movement[1]:
+        #         self.movement = [randint(-1, 1), randint(-1, 1)]
+        #     self.pos.to_int()

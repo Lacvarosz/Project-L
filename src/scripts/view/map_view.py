@@ -7,35 +7,24 @@ from scripts.view.tile import Tile
 from scripts.view.entities import Entities
 from scripts.utils.animation import Animation
 from scripts.view.character import Npc
+from scripts.ml.int_reader import Interact_reader
+from scripts.view.minimap import Minimap
+
+import os
 
 class Map_view():
     def __init__(self, assets :dict[str, Animation], map :Map, player :Character, tile_size :int) -> None:
         self.map = map
         self.surf = load_image(map.picture)
         self.player = player
+        self.minimap = Minimap()
+
+        reader = Interact_reader()
+        elder_text, elder_file = reader.read(open("src/test/interaction text format.txt", "r"))
+        elder_file.close()
+        
         self.npcs = [
-            Npc(assets["village_elder"].copy() ,Position(0,0) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(12,15) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(40,40) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(10,30) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(15,12) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(40,25) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(62,58) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["village_elder"].copy() ,Position(45,32) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,51) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,52) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,53) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,54) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,55) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,56) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,3) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,4) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,5) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,6) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,7) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,8) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,9) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
-            Npc(assets["player"].copy() ,Position(50,10) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
+            Npc(elder_text, assets["village_elder"].copy() ,Position(32,32) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
         ]
         self.tiles = [
                     Tile("tree", "green", assets["tree_green"].copy(), Position(32, 28), True, (3,4), (1, 3, 1, 1)),
@@ -60,6 +49,7 @@ class Map_view():
     def render(self, surf :pygame.Surface, monitor_rect :pygame.Rect) -> None:
         surf.blit(self.surf, (0,0))
         self.entities.render(surf, monitor_rect)
+        self.minimap.render(surf)
     
     def get_size(self) -> tuple[int, int]:
         return(self.surf.get_size())
