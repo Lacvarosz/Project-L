@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-from screeninfo import get_monitors
 from scripts.utils.animation import Animation
 from scripts.model.map import Map
 from scripts.utils.load_image import *
@@ -8,38 +7,19 @@ from scripts.utils.position import Position
 from scripts.view.map_view import Map_view
 from scripts.view.character import Player
 from scripts.view.minimap import Minimap
+from scripts.utils.window import Window
 
-for m in get_monitors():
-    if m.is_primary:
-        SCREENSIZE = (m.width, m.height)
-        break
-
-class App():
-    def __init__(self, screensize :tuple[int,int] = SCREENSIZE):
+class Village(Window):
+    def __init__(self, screensize :tuple[int,int], assets : dict[str, Animation], screen :pygame.Surface):
         self.running = False
         self.screensize = screensize
+        self.assets = assets
         self.upscale = 4
         self.tile_size = 16
         self.screen = None
         self.movement = [0,0]
-    
-    def on_init(self):
-        pygame.init()
-        self.screen = pygame.display.set_mode(self.screensize, RESIZABLE|FULLSCREEN)
+        self.screen = screen
         pygame.display.set_caption("Mi na")
-        
-        self.assets = {
-                "house_simple" : Animation(load_images("house/simple"), 10),
-                "house_peasent" : Animation(load_images("house/peasent"), 10),
-                "house_villageelder" : Animation(load_images("house/villageelder"), 10),
-                "tree_green" : Animation(load_images("tree/green"), 7),
-                "water_light": Animation(load_images("water/light"),30),
-                "player": Animation([load_image("characters/main character.png")], 1),
-                "village_elder": Animation([load_image("characters/village elder.png")],1),
-            }
-        
-        self.running = True
-        self.clock = pygame.time.Clock()
         self.map = Map_view(self.assets, Map(),Player(
             self.assets["player"],
             Position(self.screensize[0]//2//self.upscale, self.screensize[1]//2//self.upscale),
@@ -52,27 +32,23 @@ class App():
         self.display = pygame.Surface(self.map.get_size(),HWSURFACE)
     
     def on_event(self, event :pygame.event.Event):
-        if event.type == pygame.QUIT:
-            self.running = False
         if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                self.running = False
-            if event.key == K_UP:
+            if event.key in [K_UP, K_w]:
                 self.movement[1] -= 1
-            if event.key == K_DOWN:
+            if event.key in [K_DOWN, K_s]:
                 self.movement[1] += 1
-            if event.key == K_LEFT:
+            if event.key in [K_LEFT, K_a]:
                 self.movement[0] -= 1
-            if event.key == K_RIGHT:
+            if event.key in [K_RIGHT, K_d]:
                 self.movement[0] += 1
         if event.type == KEYUP:
-            if event.key == K_UP:
+            if event.key in [K_UP, K_w]:
                 self.movement[1] += 1
-            if event.key == K_DOWN:
+            if event.key in [K_DOWN, K_s]:
                 self.movement[1] -= 1
-            if event.key == K_LEFT:
+            if event.key in [K_LEFT, K_a]:
                 self.movement[0] += 1
-            if event.key == K_RIGHT:
+            if event.key in [K_RIGHT, K_d]:
                 self.movement[0] -= 1
     
     def on_loop(self):
@@ -86,24 +62,3 @@ class App():
                 self.map.player.subsurface_rect(self.screensize, self.upscale, self.map.get_size())
             ), self.upscale), (0,0))
         pygame.display.update()
-    
-    def on_cleanup(self):
-        pygame.quit()
-    
-    def on_execute(self):
-        if self.on_init() == False:
-            self.running = False
-        
-        while( self.running ):
-            for event in pygame.event.get():
-                self.on_event(event)
-            self.on_loop()
-            self.on_render()
-            print(self.clock.get_fps(), end="\r")
-            self.clock.tick()
-        self.on_cleanup()
-        
-    
-if __name__ == "__main__":
-    theApp = App()
-    theApp.on_execute()
