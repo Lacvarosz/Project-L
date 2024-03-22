@@ -33,6 +33,7 @@ class App():
                 "water_light": Animation(load_images("water/light"),30),
                 "player": Animation([load_image("characters/main character.png")], 1),
                 "village_elder": Animation([load_image("characters/village elder.png")],1),
+                "button" : load_image("button.png")
             }
         
         self.window = Main_menu(self.assets, self.screensize, self.screen)
@@ -59,6 +60,7 @@ class App():
                 self.window = Main_menu(self.assets, self.screensize, self.screen)
                    
     def on_render(self):
+        self.screen.fill((50,50,50))
         self.window.on_render()
         pygame.display.update()
     

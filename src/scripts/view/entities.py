@@ -41,7 +41,7 @@ class Entities():
     def render(self, surf :Surface, monitor_rect :Rect) -> None:
         for entity in self.entities:
             # if entity.get_outer_rect(self.tile_size).colliderect(monitor_rect):
-            alpha = 251
+            alpha = 255
             if type(entity) == Tile and entity.get_outer_rect(self.tile_size).colliderect(self.player.get_outer_rect(self.tile_size)) and entity.get_collision(self.tile_size).y > self.player.get_outer_rect(self.tile_size).y:
                 alpha = 100
             entity.render(surf, self.tile_size, alpha)
