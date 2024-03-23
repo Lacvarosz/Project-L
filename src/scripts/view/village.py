@@ -19,6 +19,7 @@ class Village(Window):
         self.screen = None
         self.movement = [0,0]
         self.screen = screen
+        self.state = "village"
         pygame.display.set_caption("Mi na")
         self.map = Map_view(self.assets, Map(),Player(
             self.assets["player"],
@@ -51,8 +52,9 @@ class Village(Window):
             if event.key in [K_RIGHT, K_d]:
                 self.movement[0] -= 1
     
-    def on_loop(self):
+    def on_loop(self) -> str:
         self.map.update(self.movement)
+        return self.state
     
     def on_render(self):
         self.screen.fill((0,0,0))

@@ -3,24 +3,24 @@ import pygame.locals
 from scripts.utils.position import Position
 
 class Button():
-    def __init__(self, screensize:tuple[int, int], size:tuple[int, int] = None, color:tuple[int,int,int]=(100,100,100), image :pygame.Surface  = None, text:str="Button", text_size:int=12, text_color:tuple[int,int,int]=(0,0,0), text_font:str="Arial", command=lambda : None) -> None:
+    def __init__(self, global_position:Position, size:tuple[int, int] = None, color:tuple[int,int,int]=(100,100,100), image :pygame.Surface  = None, text:str="Button", text_size:int=12, text_color:tuple[int,int,int]=(0,0,0), command=lambda : None) -> None:
         self.size = size
         self.text = text
         self.color = color
         self.alpha = 100
         self.text_size = text_size
         self.text_color = text_color
-        self.text_font = text_font
         self.command = command
         self.image = image
         if image is not None:
             self.size = image.get_size()
+            self.surface = self.image
+        else:
+            self.surface = pygame.Surface(self.size, pygame.HWSURFACE)
         
-        self.global_position = Position((screensize[0] - self.size[0]) // 2,
-            (screensize[1] - self.size[1]) // 2)
+        self.global_position = global_position
         
-        self.surface = pygame.Surface(self.size, pygame.HWSURFACE)
-        self.surface.set_colorkey((255,255,255))
+        self.surface.set_colorkey((0,0,0))
         self.text_surf :pygame.Surface
         
         self.has_change = True
@@ -43,7 +43,7 @@ class Button():
     
     def update(self) -> None:
         if self.has_change:
-            self.text_surf = pygame.font.SysFont(self.text_font, self.text_size).render(self.text, True, self.text_color)
+            self.text_surf = pygame.font.Font("src/fonts/Mystic Root Regular.ttf", self.text_size).render(self.text, True, self.text_color)
             self.surface.set_alpha(self.alpha)
     
     def render(self) -> pygame.Surface:

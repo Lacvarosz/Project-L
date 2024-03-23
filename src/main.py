@@ -58,6 +58,8 @@ class App():
                 self.window = Village(self.screensize, self.assets, self.screen)
             elif state == "main_menu":
                 self.window = Main_menu(self.assets, self.screensize, self.screen)
+            else:
+                self.running = False
                    
     def on_render(self):
         self.screen.fill((50,50,50))
