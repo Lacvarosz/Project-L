@@ -8,7 +8,6 @@ from scripts.view.entities import Entities
 from scripts.utils.animation import Animation
 from scripts.view.character import Npc
 from scripts.ml.int_reader import Interact_reader
-from scripts.view.minimap import Minimap
 
 import os
 
@@ -17,7 +16,6 @@ class Map_view():
         self.map = map
         self.surf = load_image(map.picture)
         self.player = player
-        self.minimap = Minimap()
 
         reader = Interact_reader()
         elder_text, elder_file = reader.read(open("src/test/interaction text format.txt", "r"))
@@ -49,7 +47,6 @@ class Map_view():
     def render(self, surf :pygame.Surface, monitor_rect :pygame.Rect) -> None:
         surf.blit(self.surf, (0,0))
         self.entities.render(surf, monitor_rect)
-        self.minimap.render(surf)
     
     def get_size(self) -> tuple[int, int]:
         return(self.surf.get_size())

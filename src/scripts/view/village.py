@@ -6,7 +6,6 @@ from scripts.utils.load_image import *
 from scripts.utils.position import Position
 from scripts.view.map_view import Map_view
 from scripts.view.character import Player
-from scripts.view.minimap import Minimap
 from scripts.utils.window import Window
 
 class Village(Window):
