@@ -107,7 +107,7 @@ if __name__ == "__main__":
     reader = Interact_reader(open("src/test/interaction text format.txt","r",encoding="utf-8"))
     int, file = reader.read()
     int.start()
-    while int.next():
+    while int.next(int(input("Válaszolj egy szám segítségével! "))-1):
         pass
     print("-------------------------", "\tAlles OK", "-------------------------", sep="\n")
     file.close()

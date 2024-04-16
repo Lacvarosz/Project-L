@@ -50,7 +50,7 @@ class Interaction():
         self.remain.clear()
         self.remain.push(self.start_node)
     
-    def next(self) -> bool:
+    def next(self, i :int) -> bool:
         if len(self.remain):
             node = self.remain.pop()
             print(node)
@@ -61,10 +61,10 @@ class Interaction():
                     print(len(answeres), end='. ')
                     re.read()
             if answeres != []:
-                i = int(input("Válaszolj egy szám segítségével! "))
-                answ = answeres[i-1]
+                answ = answeres[i]
                 for i in answ.relatives:
                     if (i.repetable or i.unread) and i.level < self.level:
                         self.remain.push(i)
-                return(True)
-            return(False)
+                return True
+            return False
+        return False

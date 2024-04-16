@@ -18,6 +18,8 @@ class Village(Window):
         self.tile_size = 16
         self.screen = None
         self.movement = [0,0]
+        self.interact = False
+        self.closest = None
         self.screen = screen
         self.state = "village"
         pygame.display.set_caption("Mi na")
@@ -45,6 +47,8 @@ class Village(Window):
                 self.movement[0] -= 1
             if event.key in [K_RIGHT, K_d]:
                 self.movement[0] += 1
+            if event.key == K_RETURN:
+                self.interact = True
         if event.type == KEYUP:
             if event.key in [K_UP, K_w]:
                 self.movement[1] += 1
@@ -57,6 +61,11 @@ class Village(Window):
     
     def on_loop(self) -> str:
         self.map.update(self.movement)
+        if self.interact :
+            self.closest = self.map.entities.closest
+            if self.map.entities.player.pos.distance(self.closest.pos) < 2*self.tile_size:
+                self.state = "interaction"
+            self.interact = False
         return self.state
     
     def on_render(self):

@@ -14,6 +14,7 @@ class Entities():
         self.tiles = tiles
         self.entities :list[Blitable]
         self.entities = self._sort_tile_list([player] + npcs + tiles)
+        self.closest = None
     
     def _sort_tile_list(self, tiles :list[Blitable]) -> list[Blitable]:
         n = len(tiles)
@@ -28,6 +29,7 @@ class Entities():
                     swapped = True
             if (swapped == False):
                 break
+        self.entities = tiles
         return(tiles)
     
     def update(self) -> None:
@@ -35,8 +37,12 @@ class Entities():
         for e in self.entities:
             pool.submit(e.update)
         pool.shutdown()
-        self.entities = self._sort_tile_list(self.entities)
-    
+        self._sort_tile_list(self.entities)
+        if self.npcs:
+            self.closest = self.npcs[0]
+            for npc in self.npcs:
+                if self.player.distance(npc, self.tile_size) < self.player.distance(self.closest, self.tile_size):
+                    self.closest = npc        
     
     def render(self, surf :Surface, monitor_rect :Rect) -> None:
         for entity in self.entities:
