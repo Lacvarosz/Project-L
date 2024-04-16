@@ -50,15 +50,21 @@ class Interaction():
         self.remain.clear()
         self.remain.push(self.start_node)
     
-    def next(self, i :int) -> bool:
+    def get(self) -> list[str]:
+        node = self.remain.peek()
+        ret = [str(node)]
+        for re in node.relatives.dat:
+                if (re.repetable or re.unread) and re.level < self.level:
+                    ret.append(str(re))
+        return(ret)
+    
+    def next(self, i :int) -> list[str]:
         if len(self.remain):
             node = self.remain.pop()
-            print(node)
             answeres = []
             for re in node.relatives.dat:
                 if (re.repetable or re.unread) and re.level < self.level:
                     answeres.append(re)
-                    print(len(answeres), end='. ')
                     re.read()
             if answeres != []:
                 answ = answeres[i]

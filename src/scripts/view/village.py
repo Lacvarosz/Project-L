@@ -77,4 +77,3 @@ class Village(Window):
             )
         self.screen.blit(pygame.transform.scale_by(seeable, self.upscale), (0,0))
         self.screen.blit(pygame.transform.scale(self.display, (self.map.get_size()[0]//4, self.map.get_size()[1]//4)), (10, 10))
-        pygame.display.update()

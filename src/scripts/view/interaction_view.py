@@ -5,13 +5,15 @@ from scripts.utils.window import Window
 from scripts.view.character import Player, Npc
 
 class Interaction_view(Window):
-    def __init__(self, player :Player, npc :Npc) -> None:
+    def __init__(self, player :Player, npc :Npc, screen :pygame.Surface) -> None:
         self.player = player
         self.npc = npc
         self.npc.interaction.start()
         self.choice = -1
         self.step = False
         self.progress = True
+        self.screen = screen
+        self.font = pygame.font.Font("src/fonts/Mystic Root Regular.ttf", 15)
         
     def on_event(self, event :pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -34,6 +36,19 @@ class Interaction_view(Window):
     def on_loop(self):
         if self.step and self.progress:
             self.npc.interaction.next(self.choice)
+            self.step = False
     
     def on_render(self):
-        return super().on_render()
+        self.screen.fill((150,150,150))
+        self.screen.blit(self.player.anim.img(), (0, self.screen.get_height() - self.player.anim.img().get_height()))
+        self.screen.blit(self.npc.anim.img(), (
+            self.screen.get_width()-self.npc.anim.img().get_width(), 
+            self.screen.get_height() - self.player.anim.img().get_height())
+        )
+        text_surf = self.font.render("\n\t".join(self.npc.interaction.get()), True, (0,0,0))
+        self.screen.blit(text_surf, (
+            (self.screen.get_width() - text_surf.get_width())//2,
+            self.screen.get_height() - text_surf.get_height()
+        ))
+    
+    

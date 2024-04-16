@@ -3,6 +3,7 @@ from pygame.locals import *
 from screeninfo import get_monitors
 from scripts.utils.animation import Animation
 from scripts.utils.load_image import *
+from scripts.view.interaction_view import Interaction_view
 from scripts.view.main_menu import Main_menu
 from scripts.view.village import Village
 from scripts.utils.window import Window
@@ -58,6 +59,8 @@ class App():
                 self.window = Village(self.screensize, self.assets, self.screen)
             elif state == "main_menu":
                 self.window = Main_menu(self.assets, self.screensize, self.screen)
+            elif state == "interaction":
+                self.window = Interaction_view(self.window.map.player, self.window.closest, self.screen)
             else:
                 self.running = False
                    

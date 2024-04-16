@@ -22,7 +22,7 @@ class Map_view():
         elder_file.close()
         
         self.npcs = [
-            Npc(elder_text, assets["village_elder"].copy() ,Position(32,32) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
+            Npc(elder_text, assets["village_elder"].copy() ,Position(10,10) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
         ]
         self.tiles = [
                     Tile("tree", "green", assets["tree_green"].copy(), Position(32, 28), True, (3,4), (1, 3, 1, 1)),
