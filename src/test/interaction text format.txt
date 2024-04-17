@@ -10,7 +10,26 @@
             text=Szomorúan.
             [act]
                 text=Mondjak egy viccet?
-                connect=Kecske
+                [react]
+                    text=Na halljuk!
+                    [act]
+                        text=Hogy hívják a lábatlan lovat?
+                        [react]
+                            text=Nem tudom.
+                            [act]
+                                text=Has olló
+                                id=vicc
+                                [react]
+                                    text=xD
+                                [/react]
+                            [/act]
+                        [/react]
+                        [react]
+                            text=Na, hogy?
+                            connect=vicc
+                        [/react]
+                    [/act]
+                [/react]
                 [react]
                     text=Ne, már csak az hiányzik!
                 [/react]
