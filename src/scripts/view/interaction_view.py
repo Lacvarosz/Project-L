@@ -5,15 +5,16 @@ from scripts.utils.window import Window
 from scripts.view.character import Player, Npc
 
 class Interaction_view(Window):
-    def __init__(self, player :Player, npc :Npc, screen :pygame.Surface) -> None:
-        self.player = player
-        self.npc = npc
+    def __init__(self, window :Window, screen :pygame.Surface) -> None:
+        self.player = window.map.player
+        self.npc = window.closest
         self.npc.interaction.start()
         self.choice = -1
         self.step = False
         self.progress = True
         self.screen = screen
-        self.font = pygame.font.Font("src/fonts/Mystic Root Regular.ttf", 15)
+        self.font = pygame.font.SysFont("Arial", 32)
+        self.display = pygame.Surface((screen.get_width()//16, screen.get_height()//16))
         
     def on_event(self, event :pygame.event.Event):
         if event.type == pygame.KEYDOWN:
@@ -33,22 +34,29 @@ class Interaction_view(Window):
                 self.choice = 4
                 self.step = True
     
-    def on_loop(self):
+    def on_loop(self) -> str:
         if self.step and self.progress:
-            self.npc.interaction.next(self.choice)
             self.step = False
+            if not self.npc.interaction.next(self.choice):
+                return "village"
+        return "interaction"
     
     def on_render(self):
-        self.screen.fill((150,150,150))
-        self.screen.blit(self.player.anim.img(), (0, self.screen.get_height() - self.player.anim.img().get_height()))
-        self.screen.blit(self.npc.anim.img(), (
-            self.screen.get_width()-self.npc.anim.img().get_width(), 
-            self.screen.get_height() - self.player.anim.img().get_height())
+        self.display.fill((150,150,150))
+        self.display.blit(self.player.anim.img(), (0, self.display.get_height() - self.player.anim.img().get_height()))
+        self.display.blit(self.npc.anim.img(), (
+            self.display.get_width()-self.npc.anim.img().get_width(), 
+            self.display.get_height() - self.player.anim.img().get_height())
         )
-        text_surf = self.font.render("\n\t".join(self.npc.interaction.get()), True, (0,0,0))
-        self.screen.blit(text_surf, (
-            (self.screen.get_width() - text_surf.get_width())//2,
-            self.screen.get_height() - text_surf.get_height()
-        ))
-    
-    
+        
+        self.screen.blit(pygame.transform.scale(self.display, self.screen.get_size()), (0,0))
+        lines = self.npc.interaction.get()
+        for i in range(0, len(lines)):
+            if i:
+                text_surf = self.font.render(f"{i}. {lines[i]}", True, (0,0,0))
+            else:
+                text_surf = self.font.render(lines[i], True, (0,0,0))
+            self.screen.blit(text_surf, (
+                (self.screen.get_width() - text_surf.get_width())//2,
+                self.screen.get_height() - text_surf.get_height()*len(lines) + i * text_surf.get_height()
+        ))    

@@ -18,7 +18,7 @@ class Map_view():
         self.player = player
 
         reader = Interact_reader()
-        elder_text, elder_file = reader.read(open("src/test/interaction text format.txt", "r"))
+        elder_text, elder_file = reader.read(open("src/test/interaction text format.txt", "r", encoding="utf-8"))
         elder_file.close()
         
         self.npcs = [

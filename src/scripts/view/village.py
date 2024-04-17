@@ -1,4 +1,5 @@
 import pygame
+from typing import Self
 from pygame.locals import *
 from scripts.utils.animation import Animation
 from scripts.model.map import Map
@@ -10,9 +11,11 @@ from scripts.utils.window import Window
 from scripts.view.minimap import Minimap
 
 class Village(Window):
-    def __init__(self, screensize :tuple[int,int], assets : dict[str, Animation], screen :pygame.Surface):
+    _village = None
+    
+    def __init__(self, assets : dict[str, Animation], screen :pygame.Surface):
         self.running = False
-        self.screensize = screensize
+        self.screensize = screen.get_size()
         self.assets = assets
         self.upscale = 4
         self.tile_size = 16
@@ -37,6 +40,13 @@ class Village(Window):
         
         self.minimap = Minimap
     
+    @classmethod
+    def village(cls, assets : dict[str, Animation], screen :pygame.Surface) -> Self:
+        if cls._village == None:
+            cls._village = Village(assets, screen)
+        cls._village.state = "village"
+        return cls._village
+
     def on_event(self, event :pygame.event.Event):
         if event.type == KEYDOWN:
             if event.key in [K_UP, K_w]:

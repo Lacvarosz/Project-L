@@ -24,7 +24,6 @@ class Node():
     
     def read(self) -> str:
         self.unread = False
-        print(self)
         return(str(self))
 
 class Interaction():
@@ -51,26 +50,28 @@ class Interaction():
         self.remain.push(self.start_node)
     
     def get(self) -> list[str]:
-        node = self.remain.peek()
-        ret = [str(node)]
-        for re in node.relatives.dat:
-                if (re.repetable or re.unread) and re.level < self.level:
-                    ret.append(str(re))
-        return(ret)
+        if not self.remain.is_empty():
+            node = self.remain.peek()
+            ret = [str(node)]
+            for re in node.relatives.dat:
+                    if (re.repetable or re.unread) and re.level < self.level:
+                        ret.append(str(re))
+            return(ret)
+        return []
     
     def next(self, i :int) -> list[str]:
-        if len(self.remain):
-            node = self.remain.pop()
+        if not self.remain.is_empty():
+            node = self.remain.peek()
             answeres = []
             for re in node.relatives.dat:
                 if (re.repetable or re.unread) and re.level < self.level:
                     answeres.append(re)
                     re.read()
-            if answeres != []:
+            if len(answeres) > i:
+                self.remain.pop()
                 answ = answeres[i]
                 for i in answ.relatives:
                     if (i.repetable or i.unread) and i.level < self.level:
                         self.remain.push(i)
-                return True
-            return False
+            return not self.remain.is_empty()
         return False

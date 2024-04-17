@@ -20,5 +20,8 @@
     [act]
         text=Legyen szép napod!
         connect=Kecske
+        [react]
+            text=Dolgom van, megyek, szép napot!
+        [/react]
     [/act]
 [/interaction]

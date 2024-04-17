@@ -7,25 +7,25 @@ from scripts.utils.button import Button
 from scripts.utils.position import Position
 
 class Main_menu(Window):
-    def __init__(self, assets :dict[str, Animation], screensize : tuple[int, int], screen :pygame.Surface) -> None:
-        self.screensize = screensize
+    def __init__(self, assets :dict[str, Animation], screen :pygame.Surface) -> None:
+        self.screensize = screen.get_size()
         self.screen = screen
         self.assets = assets
         self.new_game_b = Button(Position(
-            (screensize[0] - assets["button"].get_size()[0]) // 2,
-            (screensize[1] - assets["button"].get_size()[1]*4) // 5,    
+            (self.screensize[0] - assets["button"].get_size()[0]) // 2,
+            (self.screensize[1] - assets["button"].get_size()[1]*4) // 5,    
         ), image=assets["button"].copy(), text="New Game",command=self.new_game, text_size=36)
         self.load_game_b = Button(Position(
-            (screensize[0] - assets["button"].get_size()[0]) // 2,
-            (screensize[1] - assets["button"].get_size()[1]*4) // 5 + assets["button"].get_size()[1] + (screensize[1] - assets["button"].get_size()[1]*4) // 5,    
+            (self.screensize[0] - assets["button"].get_size()[0]) // 2,
+            (self.screensize[1] - assets["button"].get_size()[1]*4) // 5 + assets["button"].get_size()[1] + (self.screensize[1] - assets["button"].get_size()[1]*4) // 5,    
         ), image=assets["button"].copy(), text="Load Game", text_size=36)
         self.options_b = Button(Position(
-            (screensize[0] - assets["button"].get_size()[0]) // 2,
-            (screensize[1] - assets["button"].get_size()[1]*4) // 5 + 2*(assets["button"].get_size()[1] + (screensize[1] - assets["button"].get_size()[1]*4) // 5),    
+            (self.screensize[0] - assets["button"].get_size()[0]) // 2,
+            (self.screensize[1] - assets["button"].get_size()[1]*4) // 5 + 2*(assets["button"].get_size()[1] + (self.screensize[1] - assets["button"].get_size()[1]*4) // 5),    
         ), image=assets["button"].copy(), text="Options", text_size=36)
         self.exit_b = Button(Position(
-            (screensize[0] - assets["button"].get_size()[0]) // 2,
-            (screensize[1] - assets["button"].get_size()[1]*4) // 5 + 3*(assets["button"].get_size()[1] + (screensize[1] - assets["button"].get_size()[1]*4) // 5),    
+            (self.screensize[0] - assets["button"].get_size()[0]) // 2,
+            (self.screensize[1] - assets["button"].get_size()[1]*4) // 5 + 3*(assets["button"].get_size()[1] + (self.screensize[1] - assets["button"].get_size()[1]*4) // 5),    
         ), image=assets["button"].copy(), text="Exit",command=self.exit, text_size=36)
         self.state = "main_menu"
     

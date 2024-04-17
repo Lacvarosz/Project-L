@@ -37,7 +37,7 @@ class App():
                 "button" : load_image("button.png")
             }
         
-        self.window = Main_menu(self.assets, self.screensize, self.screen)
+        self.window = Main_menu(self.assets, self.screen)
         
         
         self.running = True
@@ -56,11 +56,11 @@ class App():
         if state != self.state:
             self.state = state
             if state == "village":
-                self.window = Village(self.screensize, self.assets, self.screen)
+                self.window = Village.village(self.assets, self.screen)
             elif state == "main_menu":
-                self.window = Main_menu(self.assets, self.screensize, self.screen)
+                self.window = Main_menu(self.assets, self.screen)
             elif state == "interaction":
-                self.window = Interaction_view(self.window.map.player, self.window.closest, self.screen)
+                self.window = Interaction_view(self.window, self.screen)
             else:
                 self.running = False
                    
@@ -81,7 +81,7 @@ class App():
                 self.on_event(event)
             self.on_loop()
             self.on_render()
-            print(self.clock.get_fps(), end="\r")
+            # print(self.clock.get_fps(), end="\r")
             self.clock.tick()
         self.on_cleanup()
         

@@ -36,3 +36,6 @@ class Stack(Generic[T]):
         else:
             raise StopIteration
     
+    def __str__(self) -> str:
+        return str(self.dat)
+    
