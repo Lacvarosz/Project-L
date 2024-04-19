@@ -8,6 +8,7 @@
         [/react] #Edd ki a levest
         [react]
             text=Szomorúan.
+            id=szomorú
             [act]
                 text=Mondjak egy viccet?
                 [react]
@@ -21,11 +22,13 @@
                                 id=vicc
                                 [react]
                                     text=xD
+                                    increment_level =   yes
                                 [/react]
                             [/act]
                         [/react]
                         [react]
                             text=Na, hogy?
+                            level=1
                             connect=vicc
                         [/react]
                     [/act]
@@ -38,7 +41,7 @@
     [/act]
     [act]
         text=Legyen szép napod!
-        connect=Kecske
+        connect=Kecske, szomorú
         [react]
             text=Dolgom van, megyek, szép napot!
         [/react]

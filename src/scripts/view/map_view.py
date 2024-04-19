@@ -7,7 +7,7 @@ from scripts.view.tile import Tile
 from scripts.view.entities import Entities
 from scripts.utils.animation import Animation
 from scripts.view.character import Npc
-from scripts.ml.int_reader import Interact_reader
+from scripts.ml.interact_reader import Interact_reader
 
 import os
 

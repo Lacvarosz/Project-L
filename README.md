@@ -46,6 +46,10 @@ Its possible to define infinite amount of parameters, but the program only uses 
 
 - repetable *(yes, no)*
 : This parameter responsible for set action repetable or no. Repetable is yes by default. 
+
+- increment_level *(yes, no)*
+: If it is yes, then increase the conversation level by 1.
+
 ### Example
 ```
 [interaction]
@@ -58,18 +62,43 @@ Its possible to define infinite amount of parameters, but the program only uses 
         [/react] #Edd ki a levest
         [react]
             text=Szomorúan.
+            id=szomorú
             [act]
                 text=Mondjak egy viccet?
-                connect=Kecske
                 [react]
-                    text=Na már csak az hiányzik!
+                    text=Na halljuk!
+                    [act]
+                        text=Hogy hívják a lábatlan lovat?
+                        [react]
+                            text=Nem tudom.
+                            [act]
+                                text=Has olló
+                                id=vicc
+                                [react]
+                                    text=xD
+                                    increment_level =   yes
+                                [/react]
+                            [/act]
+                        [/react]
+                        [react]
+                            text=Na, hogy?
+                            level=1
+                            connect=vicc
+                        [/react]
+                    [/act]
+                [/react]
+                [react]
+                    text=Ne, már csak az hiányzik!
                 [/react]
             [/act]
         [/react]
     [/act]
     [act]
         text=Legyen szép napod!
-        connect=Kecske
+        connect=Kecske, szomorú
+        [react]
+            text=Dolgom van, megyek, szép napot!
+        [/react]
     [/act]
 [/interaction]
 ```

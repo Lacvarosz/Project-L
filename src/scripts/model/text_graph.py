@@ -7,13 +7,14 @@ class NodeType(Enum):
     REACTION = 1
 
 class Node():
-    def __init__(self, text:str, type :NodeType, level:int = 0, ide :str = "", repetable :bool = False) -> None:
+    def __init__(self, text:str, type :NodeType, level:int = 0, ide :str = "", repetable :bool = False, increment_level :bool = False) -> None:
         self.type = type
         self.text = text
         self.level = level
         self.id = ide
         self.repetable = repetable
         self.unread = True
+        self.increment_level = increment_level
         self.relatives = Stack[Node]()
         
     def add_connection(self, node :Self) -> None:
@@ -48,6 +49,7 @@ class Interaction():
     def start(self):
         self.remain.clear()
         self.remain.push(self.start_node)
+        self.level = 1
     
     def get(self) -> list[str]:
         if not self.remain.is_empty():
@@ -70,6 +72,8 @@ class Interaction():
             if len(answeres) > i:
                 self.remain.pop()
                 answ = answeres[i]
+                if answ.increment_level:
+                    self.level += 1
                 for i in answ.relatives:
                     if (i.repetable or i.unread) and i.level < self.level:
                         self.remain.push(i)
