@@ -1,12 +1,14 @@
 from io import TextIOWrapper
 from scripts.utils.stack import Stack
-from scripts.model.text_graph import *
+from scripts.model.action import Action
+from scripts.model.text_graph import Interaction
 from typing import Any
 from scripts.ml.utils import *
 
 class Action_reader():
-    def __init__(self) -> None:
+    def __init__(self, interaction :Interaction) -> None:
         self.lines = 0
+        self.interaction = interaction
     
     def readline(self, file :TextIOWrapper) -> str:
         while True:
@@ -22,28 +24,48 @@ class Action_reader():
     
     def get_params(self, file :TextIOWrapper) -> tuple:
         params = {
-            "set_level" : -1,
-            "change_level_by" : 0,
+            "apply_to" : None,
+            "increment" : None,
+            "set" : None,
+            "increase" : None
         }
         line = self.readline(file).split("=")
-        while line[0][0] != '[':
+        while line[0] != 'EOF':
             if len(line) == 1:
                 raise IllegalFileFormat(f"Bed parameter definition in line {self.lines}!\n")
             params[line[0].strip()] = line[1].strip()
             line = self.readline(file).split("=")
         return((params, line[0]))     
     
-    def read(self, file :TextIOWrapper, lines:int = 0) -> tuple[Interaction, TextIOWrapper]:
+    def read(self, file :TextIOWrapper, lines:int = 0) -> tuple[Action, TextIOWrapper]:
         self.lines = lines
         struct = Stack[str]()
-        nodes = Stack[Node]()
-        line = self.readline(file)
-        inter = None
+        action = None
+        params, line = self.get_params(file)
+        if params["apply_to"] is not None:
+            if params["apply_to"] == "level":
+                if params["increment"] == "yes":
+                    action = Action(self.increment_level)
+                elif params["set"] is not None:
+                    self.value = int(params["set"])
+                    action = Action(self.set_level)
+                elif params["increase"] is not None:
+                    self.value = int(params["increase"])
+                    action = Action(self.increase_level)
             
         if line == "EOF":
-            return(inter, file)
+            return(action, file)
         else:
             raise IllegalFileFormat(f"Something illegal in line {self.lines}!")
+    
+    def increment_level(self):
+        self.interaction.level += 1
+    
+    def set_level(self):
+        self.interaction.level = self.value
+    
+    def increase_level(self):
+        self.interaction.level += self.value
         
                 
 if __name__ == "__main__":

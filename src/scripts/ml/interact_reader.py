@@ -1,6 +1,7 @@
 from io import TextIOWrapper
 from scripts.utils.stack import Stack
 from scripts.model.text_graph import *
+from scripts.ml.action_reader import Action_reader
 from typing import Any
 from scripts.ml.utils import *
 
@@ -20,13 +21,13 @@ class Interact_reader():
             if ret:
                 return(ret)
     
-    def get_params(self, file :TextIOWrapper) -> tuple:
+    def get_params(self, file :TextIOWrapper, inter :Interaction) -> tuple:
         params = {
             "text" : "Hello!",
             "id" : "",
             "repetable" : "yes",
             "level" : 0,
-            "increment_level" : "no"
+            "action" : None,
         }
         line = self.readline(file).split("=")
         while line[0][0] != '[':
@@ -34,10 +35,13 @@ class Interact_reader():
                 raise IllegalFileFormat(f"Bed parameter definition in line {self.lines}!\n")
             params[line[0].strip()] = line[1].strip()
             line = self.readline(file).split("=")
+        if line[0] == "[action]":
+            params["action"], file = Action_reader(inter).read(file, self.lines)
+            line = [self.readline(file)]
         return((params, line[0]))
     
     def is_exist(self, k: Any, d :dict) -> Any:
-        if k in ("repetable", "increment_level"):
+        if k == "repetable":
             if d[k] == "yes":
                 return(True)
             return(False)
@@ -62,9 +66,9 @@ class Interact_reader():
         whithout_child = []
         while line:
             if line == "[act]":
-                params, line = self.get_params(file)
+                params, line = self.get_params(file, inter)
                 if struct.is_empty():
-                    nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("increment_level", params)))
+                    nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("action", params)))
                     self.extra_connection(nodes.peek(),params,inter)
                     if whithout_child == []:
                         inter = Interaction(nodes.peek())
@@ -74,15 +78,15 @@ class Interact_reader():
                         whithout_child = []
                 else:
                     c = nodes.peek()
-                    nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("increment_level", params)))
+                    nodes.push(Node(params["text"],NodeType.ACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("action", params)))
                     self.extra_connection(nodes.peek(),params,inter)
                     c.add_connection(nodes.peek())
                 struct.push("[act]")
                 
             elif line == "[react]":
-                params, line = self.get_params(file)
+                params, line = self.get_params(file, inter)
                 c = nodes.peek()
-                nodes.push(Node(params["text"],NodeType.REACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("increment_level", params)))
+                nodes.push(Node(params["text"],NodeType.REACTION,self.is_exist("level", params),self.is_exist("id", params), self.is_exist("repetable", params), self.is_exist("action", params)))
                 self.extra_connection(nodes.peek(),params,inter)
                 struct.push("[react]")
                 c.add_connection(nodes.peek())

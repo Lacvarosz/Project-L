@@ -22,7 +22,10 @@
                                 id=vicc
                                 [react]
                                     text=xD
-                                    increment_level =   yes
+                                    [action]
+                                        apply_to=level
+                                        increment=yes
+                                    [/action]
                                 [/react]
                             [/act]
                         [/react]

@@ -29,9 +29,13 @@ Currently there are two types of tags: `act`, `react`
 - react
 : This is responsible for the PC's answeres. One react scribes a possible chooseble answere.
 
-### Parameters
-Its possible to define infinite amount of parameters, but the program only uses 5 parameters.
+- action
+: This tag whrites the changes of the interaction.
 
+### Parameters
+Its possible to define infinite amount of parameters, but only some of them is usefull in specific tags.
+
+#### Act / React
 - text *(text)*
 : This is the text of an action. 
 
@@ -47,8 +51,18 @@ Its possible to define infinite amount of parameters, but the program only uses 
 - repetable *(yes, no)*
 : This parameter responsible for set action repetable or no. Repetable is yes by default. 
 
-- increment_level *(yes, no)*
-: If it is yes, then increase the conversation level by 1.
+#### Action
+- apply_to *(str)*
+: Name of an int variable.
+
+- increment *(yes/no)*
+: Increase the variable by 1.
+
+- increase *(integer)*
+: Increase the variable by the parameter.
+
+- set *(integer)*
+: Set the variable to the value of the parameter.
 
 ### Example
 ```

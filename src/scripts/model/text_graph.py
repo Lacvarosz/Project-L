@@ -1,5 +1,6 @@
 from typing import Self
 from enum import Enum
+from scripts.model.action import Action
 from scripts.utils.stack import Stack
 
 class NodeType(Enum):
@@ -7,14 +8,14 @@ class NodeType(Enum):
     REACTION = 1
 
 class Node():
-    def __init__(self, text:str, type :NodeType, level:int = 0, ide :str = "", repetable :bool = False, increment_level :bool = False) -> None:
+    def __init__(self, text:str, type :NodeType, level:int = 0, ide :str = "", repetable :bool = False, action :Action = None) -> None:
         self.type = type
         self.text = text
         self.level = level
         self.id = ide
         self.repetable = repetable
         self.unread = True
-        self.increment_level = increment_level
+        self.action = action
         self.relatives = Stack[Node]()
         
     def add_connection(self, node :Self) -> None:
@@ -72,8 +73,8 @@ class Interaction():
             if len(answeres) > i:
                 self.remain.pop()
                 answ = answeres[i]
-                if answ.increment_level:
-                    self.level += 1
+                if answ.action is not None:
+                    answ.action.execute()
                 for i in answ.relatives:
                     if (i.repetable or i.unread) and i.level < self.level:
                         self.remain.push(i)
