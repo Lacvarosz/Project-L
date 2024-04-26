@@ -1,52 +1,60 @@
-[interaction]
-    [act]
-        text=Helló, hogy vagy?
-        level=0
-        [react]
-            text=Köszi, jól.
-            id=Kecske
-        [/react] #Edd ki a levest
-        [react]
-            text=Szomorúan.
-            id=szomorú
-            [act]
-                text=Mondjak egy viccet?
-                [react]
-                    text=Na halljuk!
-                    [act]
-                        text=Hogy hívják a lábatlan lovat?
-                        [react]
-                            text=Nem tudom.
-                            [act]
-                                text=Has olló
-                                id=vicc
-                                [react]
-                                    text=xD
-                                    [action]
-                                        apply_to=level
-                                        increment=yes
-                                    [/action]
-                                [/react]
-                            [/act]
-                        [/react]
-                        [react]
-                            text=Na, hogy?
-                            level=1
-                            connect=vicc
-                        [/react]
-                    [/act]
-                [/react]
-                [react]
-                    text=Ne, már csak az hiányzik!
-                [/react]
-            [/act]
-        [/react]
-    [/act]
-    [act]
-        text=Legyen szép napod!
-        connect=Kecske, szomorú
-        [react]
-            text=Dolgom van, megyek, szép napot!
-        [/react]
-    [/act]
-[/interaction]
+[npc]
+    position= 10, 10
+    has_collision = yes
+    name = Village Elder
+    speed = 0.2
+    size = 1, 2
+    collision = 0, 1, 1, 1
+    [interaction]
+        [act]
+            text=Helló, hogy vagy?
+            level=0
+            [react]
+                text=Köszi, jól.
+                id=Kecske
+            [/react] #Edd ki a levest
+            [react]
+                text=Szomorúan.
+                id=szomorú
+                [act]
+                    text=Mondjak egy viccet?
+                    [react]
+                        text=Na halljuk!
+                        [act]
+                            text=Hogy hívják a lábatlan lovat?
+                            [react]
+                                text=Nem tudom.
+                                [act]
+                                    text=Has olló
+                                    id=vicc
+                                    [react]
+                                        text=xD
+                                        [action]
+                                            apply_to=level
+                                            increment=yes
+                                        [/action]
+                                    [/react]
+                                [/act]
+                            [/react]
+                            [react]
+                                text=Na, hogy?
+                                level=1
+                                connect=vicc
+                            [/react]
+                        [/act]
+                    [/react]
+                    [react]
+                        text=Ne, már csak az hiányzik!
+                    [/react]
+                [/act]
+            [/react]
+        [/act]
+        [act]
+            text=Legyen szép napod!
+            connect=Kecske, szomorú
+            [react]
+                text=Dolgom van, megyek, szép napot!
+            [/react]
+        [/act]
+    [/interaction]
+[/npc]

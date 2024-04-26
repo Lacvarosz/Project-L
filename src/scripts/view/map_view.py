@@ -7,7 +7,7 @@ from scripts.view.tile import Tile
 from scripts.view.entities import Entities
 from scripts.utils.animation import Animation
 from scripts.view.character import Npc
-from scripts.ml.interact_reader import Interact_reader
+from scripts.ml.npc_reader import Npc_reader
 
 import os
 
@@ -17,12 +17,12 @@ class Map_view():
         self.surf = load_image(map.picture)
         self.player = player
 
-        reader = Interact_reader()
-        elder_text, elder_file = reader.read(open("src/test/interaction text format.txt", "r", encoding="utf-8"))
+        reader = Npc_reader(assets, tile_size)
+        elder, elder_file = reader.read(open("src/test/interaction text format.txt", "r", encoding="utf-8"))
         elder_file.close()
         
         self.npcs = [
-            Npc(elder_text, assets["village_elder"].copy() ,Position(10,10) * tile_size, True, "Village Elder", 0.2, (1,2),(0,1,1,1)),
+            elder,
         ]
         self.tiles = [
                     Tile("tree", "green", assets["tree_green"].copy(), Position(32, 28), True, (3,4), (1, 3, 1, 1)),
