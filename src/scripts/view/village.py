@@ -73,7 +73,7 @@ class Village(Window):
         self.map.update(self.movement)
         if self.interact :
             self.closest = self.map.entities.closest
-            if self.map.entities.player.pos.distance(self.closest.pos) < 2*self.tile_size:
+            if self.map.entities.player.pos.distance(self.closest.pos) < 2*self.tile_size and self.closest.interaction is not None:
                 self.state = "interaction"
             self.interact = False
         return self.state

@@ -5,6 +5,7 @@
     speed = 0.2
     size = 1, 2
     collision = 0, 1, 1, 1
+    animation = village_elder
     [interaction]
         [act]
             text=Helló, hogy vagy?

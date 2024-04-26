@@ -57,7 +57,7 @@ class Interact_reader():
                 node = inter.search_id(c.strip())
                 parent.add_connection(node)       
     
-    def read(self, file :TextIOWrapper, line, lines :int = 0) -> tuple[Interaction, TextIOWrapper]:
+    def read(self, file :TextIOWrapper, lines :int = 0) -> tuple[Interaction, TextIOWrapper]:
         self.lines = lines
         struct = Stack[str]()
         nodes = Stack[Node]()
